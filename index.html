@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>AKSAKA | SUPREME ENTITY</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=JetBrains+Mono:wght@500&family=Plus+Jakarta+Sans:wght@300;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #ff0055; --ai: #00f2ff; --glass: rgba(255, 255, 255, 0.05); }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: #000; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; height: 100dvh; overflow: hidden; }
+
+        /* VIDEO BACKGROUND */
+        .video-bg { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+        video#eye-bg { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.3); }
+
+        /* FLASH EFFECT LAYER */
+        #flash-effect { position: fixed; inset: 0; pointer-events: none; z-index: 6000; background: #fff; opacity: 0; transition: opacity 0.1s; }
+
+        /* LOGIN SCREEN */
+        #login-screen { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #000; transition: 0.8s cubic-bezier(0.95, 0.05, 0.795, 0.035); }
+        .aksaka-title { font-family: 'Orbitron'; font-size: 3.5rem; color: #fff; text-shadow: 0 0 30px var(--accent); letter-spacing: 10px; cursor: pointer; margin-bottom: 40px; }
+
+        /* MAIN APP CONTAINER */
+        #main-app { display: none; position: fixed; inset: 0; z-index: 1000; background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%); overflow-y: auto; padding-bottom: 120px; transition: transform 0.2s; }
+        .container { max-width: 450px; margin: 0 auto; padding: 25px; }
+
+        /* JAM OVERDRIVE STYLES */
+        #digital-clock { font-family: 'Orbitron'; font-size: 3.2rem; text-shadow: 3px 3px var(--accent), -3px -3px var(--ai); letter-spacing: -2px; transition: all 0.05s; }
+        .glitch-text { animation: text-glitch 0.1s infinite; }
+        @keyframes text-glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 3px); filter: hue-rotate(90deg); }
+            40% { transform: translate(-3px, -3px); }
+            60% { transform: translate(3px, 3px); filter: separation(1px); }
+            80% { transform: translate(3px, -3px); }
+            100% { transform: translate(0); }
+        }
+
+        /* ANIMASI SCANNER & BARS */
+        @keyframes scan { 0% { top: 0%; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+        .bar-anim { animation: bar-up 0.5s infinite alternate ease-in-out; }
+        @keyframes bar-up { 0% { height: 4px; opacity: 0.3; } 100% { height: 25px; opacity: 1; } }
+
+        /* SCREEN SHAKE */
+        .explode-shake { animation: explode 0.2s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes explode {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.03) translate(3px, -3px); filter: brightness(1.8) contrast(1.5); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+
+        /* UI COMPONENTS */
+        .joki-card { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(15px); border-radius: 30px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .joki-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: var(--glass); border-radius: 15px; margin-bottom: 10px; border: 1px solid transparent; transition: 0.3s; }
+        .price-input { background: transparent; border: none; color: var(--ai); font-family: 'JetBrains Mono'; font-weight: 800; text-align: right; width: 80px; outline: none; }
+
+        /* NAV */
+        nav { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; height: 75px; background: rgba(10,10,10,0.8); backdrop-filter: blur(20px); border-radius: 30px; display: flex; justify-content: space-around; align-items: center; border: 1px solid #222; z-index: 2000; }
+        .nav-link { font-family: 'Orbitron'; font-size: 10px; color: #444; cursor: pointer; transition: 0.3s; }
+        .nav-link.active { color: #fff; text-shadow: 0 0 15px var(--ai); }
+    </style>
+</head>
+<body>
+
+    <div class="video-bg">
+        <video id="eye-bg" autoplay muted loop playsinline><source src="https://files.catbox.moe/g1h8cv.mp4" type="video/mp4"></video>
+    </div>
+
+    <audio id="bgm" loop><source src="https://files.catbox.moe/6v0p6a.mp3" type="audio/mpeg"></audio>
+    <audio id="tick-sfx"><source src="https://files.catbox.moe/d3m0un.mp3" type="audio/mpeg"></audio>
+
+    <div id="flash-effect"></div>
+
+    <div id="login-screen">
+        <h1 class="aksaka-title" id="aksaka-trigger">AKSAKA</h1>
+        <button class="px-12 py-5 bg-white text-black font-black rounded-2xl hover:bg-[var(--ai)] transition-all duration-300 transform active:scale-90" id="enter-btn">INITIALIZE_CORE</button>
+        <p class="text-[8px] mt-6 text-zinc-700 tracking-[10px] animate-pulse">AUTHORIZING_ACCESS...</p>
+    </div>
+
+    <div id="main-app">
+        <div class="container relative">
+            
+            <div id="core" class="tab-panel">
+                <center class="mt-4">
+                    <div class="relative inline-block">
+                        <div class="absolute inset-0 bg-[var(--ai)] blur-2xl opacity-20 animate-pulse"></div>
+                        <img src="https://files.catbox.moe/kzrkbp.jpg" class="relative w-24 h-24 rounded-[35px] mb-8 shadow-2xl object-cover border-2 border-white/10 animate-[bounce_4s_infinite]">
+                    </div>
+                </center>
+                
+                <div class="flex flex-col items-center mb-10 relative">
+                    <div class="absolute w-full h-[1px] bg-[var(--ai)] top-0 shadow-[0_0_15px_var(--ai)] opacity-40 z-0 animate-[scan_2s_linear_infinite]"></div>
+                    
+                    <div class="relative w-64 h-64 flex items-center justify-center">
+                        <div class="absolute inset-0 border-2 border-dashed border-zinc-800 rounded-full animate-[spin_40s_linear_infinite]"></div>
+                        <div class="absolute inset-4 border-2 border-t-[var(--accent)] border-transparent rounded-full animate-[spin_1.5s_linear_infinite]"></div>
+                        <div class="absolute inset-8 border border-b-[var(--ai)] border-transparent rounded-full animate-[spin_4s_linear_infinite_reverse]"></div>
+                        
+                        <div class="text-center z-10">
+                            <div id="digital-clock" class="font-black leading-none select-none text-white" data-time="00:00:00">00:00:00</div>
+                            <div id="digital-date" class="text-[8px] text-zinc-500 tracking-[6px] mt-4 font-mono font-bold">SYSTEM_IDLE</div>
+                            
+                            <div class="flex justify-center items-end gap-1 h-5 mt-4">
+                                <div class="w-1 bg-[var(--ai)] bar-anim" style="animation-delay: 0.1s"></div>
+                                <div class="w-1 bg-white bar-anim" style="animation-delay: 0.3s"></div>
+                                <div class="w-1 bg-[var(--accent)] bar-anim" style="animation-delay: 0.2s"></div>
+                                <div class="w-1 bg-[var(--ai)] bar-anim" style="animation-delay: 0.4s"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="joki-card border-l-4 border-emerald-500">
+                    <div id="type-target" class="font-mono text-[11px] text-emerald-400 leading-relaxed uppercase"></div>
+                </div>
+            </div>
+
+            <div id="joki" class="tab-panel hidden pt-5">
+                <h2 class="text-center font-black text-zinc-600 tracking-[8px] mb-8 text-[10px]">DATABASE_PRICING</h2>
+                <div class="joki-card space-y-3">
+                    <div class="joki-item">
+                        <span class="text-[10px] font-bold tracking-widest text-zinc-400">LEGENDARY</span>
+                        <input type="text" class="price-input" value="110K" id="price-1">
+                    </div>
+                    <div class="joki-item">
+                        <span class="text-[10px] font-bold tracking-widest text-zinc-400">MASTER</span>
+                        <input type="text" class="price-input" value="100K" id="price-2">
+                    </div>
+                    <div class="joki-item">
+                        <span class="text-[10px] font-bold tracking-widest text-zinc-400">ELITE</span>
+                        <input type="text" class="price-input" value="90K" id="price-3">
+                    </div>
+                    <button id="wa-link" class="w-full py-5 bg-white text-black font-black rounded-2xl mt-6 hover:bg-[var(--accent)] hover:text-white transition shadow-[0_10px_30px_rgba(255,255,255,0.1)]">FORCE_UPDATE_ORDER</button>
+                </div>
+            </div>
+
+            <div id="partner" class="tab-panel hidden text-center pt-5">
+                <div class="relative inline-block mb-10">
+                    <div class="absolute inset-0 bg-pink-600 blur-[60px] opacity-30 animate-pulse"></div>
+                    <img src="https://files.catbox.moe/j44mvd.jpg" class="relative w-44 h-44 mx-auto rounded-full border-4 border-white/5 shadow-2xl">
+                </div>
+                <h3 id="ayu-trigger" class="text-4xl font-black italic tracking-tighter hover:text-pink-500 transition-all duration-500 cursor-pointer">AYU_DATABASE</h3>
+                <div class="flex justify-center gap-3 mt-6">
+                    <span class="px-4 py-1.5 bg-zinc-900/80 border border-white/5 rounded-full text-[7px] tracking-[4px]">BIO_LOCKED</span>
+                    <span class="px-4 py-1.5 bg-zinc-900/80 border border-white/5 rounded-full text-[7px] tracking-[4px] text-emerald-500">ENCRYPTED</span>
+                </div>
+            </div>
+
+        </div>
+
+        <nav>
+            <div class="nav-link active" onclick="switchTab('core', this)">ENTITY</div>
+            <div class="nav-link" onclick="switchTab('joki', this)">TASKS</div>
+            <div class="nav-link" onclick="switchTab('partner', this)">VAULT</div>
+        </nav>
+    </div>
+
+    <script>
+        const login = document.getElementById('login-screen');
+        const app = document.getElementById('main-app');
+        const flash = document.getElementById('flash-effect');
+        const tickSfx = document.getElementById('tick-sfx');
+        const bgm = document.getElementById('bgm');
+        const clockEl = document.getElementById('digital-clock');
+
+        // INITIALIZE SYSTEM
+        document.getElementById('enter-btn').addEventListener('click', () => {
+            bgm.play().catch(()=>{});
+            login.style.transform = "scale(1.5) translateY(-100%)";
+            login.style.opacity = "0";
+            setTimeout(() => { 
+                login.style.display = 'none'; 
+                app.style.display = 'block'; 
+                type(); 
+                setInterval(runUltimateEngine, 1000);
+            }, 600);
+        });
+
+        // THE ULTIMATE ENGINE (JAM + SFX + VISUAL)
+        function runUltimateEngine() {
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+            
+            // 1. Update Waktu
+            clockEl.textContent = timeStr;
+            clockEl.setAttribute('data-time', timeStr);
+
+            // 2. Play Sound (Digital Beep)
+            if(tickSfx) {
+                tickSfx.volume = 0.35;
+                tickSfx.currentTime = 0;
+                tickSfx.play().catch(()=>{});
+            }
+
+            // 3. Flash Efek (Ledakan Kecil)
+            flash.style.opacity = "0.2";
+            setTimeout(() => flash.style.opacity = "0", 80);
+
+            // 4. Shake Efek (Guncangan Layar)
+            app.classList.add('explode-shake');
+            setTimeout(() => app.classList.remove('explode-shake'), 150);
+
+            // 5. Random Glitch Teks
+            if(Math.random() > 0.75) {
+                clockEl.classList.add('glitch-text');
+                setTimeout(() => clockEl.classList.remove('glitch-text'), 200);
+            }
+
+            // Update Tanggal
+            const options = { day:'2-digit', month:'short', year:'numeric', weekday:'short' };
+            document.getElementById('digital-date').textContent = `CORE_LOG // ${now.toLocaleDateString('en-US', options).toUpperCase()}`;
+        }
+
+        // TAB SWITCHER
+        function switchTab(t, el) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            document.getElementById(t).classList.remove('hidden');
+            el.classList.add('active');
+            if(t === 'core') type();
+        }
+
+        // TYPEWRITER EFFECT
+        function type() {
+            const target = document.getElementById('type-target');
+            const lines = [
+                ">> INITIALIZING SUPREME PROTOCOL...",
+                ">> ENTITY ID: AKSAKA_ARCHITECT",
+                ">> STATUS: GOD_MODE_V2",
+                ">> SECURITY: TAKEN_BY_AYU",
+                ">> ALL SYSTEMS: STABLE"
+            ];
+            target.innerHTML = "";
+            let i = 0;
+            function print() {
+                if(i < lines.length) {
+                    target.innerHTML += lines[i] + "<br>";
+                    i++;
+                    setTimeout(print, 120);
+                }
+            } print();
+        }
+
+        // WHATSAPP ORDER LOGIC
+        document.getElementById('wa-link').addEventListener('click', () => {
+            const h1 = document.getElementById('price-1').value;
+            const h2 = document.getElementById('price-2').value;
+            const h3 = document.getElementById('price-3').value;
+            const text = `SUPREME_ORDER_REQUEST\n\n- Legendary: ${h1}\n- Master: ${h2}\n- Elite: ${h3}\n\nEXECUTE_NOW.`;
+            window.open(`https://wa.me/6288902072245?text=${encodeURIComponent(text)}`);
+        });
+
+        // HIDDEN ACCESS
+        let c1=0, c2=0;
+        document.getElementById('aksaka-trigger').onclick = () => { if(++c1 >=5) { if(prompt("DEV_KEY:")=="0207") location.reload(); c1=0; } };
+        document.getElementById('ayu-trigger').onclick = () => { if(++c2 >=5) { if(prompt("VAULT_PIN:")=="2245") alert("ENCRYPTION_BYPASSED: I LOVE YOU"); c2=0; } };
+    </script>
+</body>
+</html>
