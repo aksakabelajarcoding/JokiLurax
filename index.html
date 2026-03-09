@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LURAX | ALL ADMIN DAN WORKER</title>
+    <title>LURAX TITAN | THE FORBIDDEN CODE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
@@ -16,135 +16,274 @@
 
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; transition: 0.5s; user-select: none; }
         
-        .gold-text { background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Orbitron'; font-weight: 900; filter: drop-shadow(0 0 5px rgba(191,149,63,0.3)); }
+        .gold-text { background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Orbitron'; font-weight: 900; }
+        .glass-card { background: var(--card); backdrop-filter: blur(20px); border: 1px solid rgba(191,149,63,0.2); border-radius: 30px; position: relative; overflow: hidden; }
         
-        .glass-card { background: var(--card); backdrop-filter: blur(20px); border: 1px solid rgba(191,149,63,0.2); border-radius: 25px; position: relative; overflow: hidden; }
-        
-        .btn-vip { background: linear-gradient(45deg, #8b0000, #ff0000); box-shadow: 0 0 20px rgba(255,0,0,0.4); border-radius: 12px; transition: 0.3s; color: white; border: none; font-family: 'Orbitron'; cursor: pointer; }
-        .btn-vip:hover { transform: scale(1.05); filter: brightness(1.2); }
+        .btn-vip { background: linear-gradient(45deg, #8b0000, #ff0000); box-shadow: 0 0 20px rgba(255,0,0,0.4); border-radius: 15px; color: white; border: none; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; }
+        .btn-vip:active { transform: scale(0.95); }
 
         .layer { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); transform: translateY(30px); padding: 20px; }
         .layer.active { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        #matrix-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.15; pointer-events: none; }
+        #matrix-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.15; pointer-events: none; }
         
-        /* SCANNERS & ANIMATIONS */
+        /* SPOTIFY STYLE CSS */
+        .vinyl-disk { width: 180px; height: 180px; background: radial-gradient(circle, #222 0%, #000 100%); border-radius: 50%; border: 4px solid #111; position: relative; animation: spin 4s linear infinite; animation-play-state: paused; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+        .vinyl-disk.playing { animation-play-state: running; }
+        .vinyl-disk::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 60px; height: 60px; background: url('https://files.catbox.moe/ngkxof.jpg'); background-size: cover; border-radius: 50%; border: 2px solid var(--gold); }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .visual-bar { width: 4px; background: var(--gold); margin: 0 2px; border-radius: 10px; transition: height 0.1s; height: 5px; }
+        
+        /* CODE BLOCK AI */
+        .code-box { background: #0d0d0d; color: #00ff41; padding: 12px; border-radius: 10px; font-family: 'Fira Code', monospace; font-size: 9px; border-left: 4px solid var(--gold); margin-top: 8px; overflow-x: auto; white-space: pre; }
+        
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-        .animate-scan { position: absolute; animation: scan 2s linear infinite; }
-        .visualizer-bar { width: 3px; background: var(--gold); transition: height 0.1s; }
-
-        /* THEME TOGGLE */
-        .theme-btn { position: fixed; top: 60px; right: 20px; z-index: 2000; width: 40px; height: 40px; border-radius: 50%; background: var(--gold); color: white; display: flex; align-items: center; justify-content: center; border: none; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-
-        /* SCROLLBAR HIDE */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .scanner-line { position: absolute; width: 100%; height: 2px; background: #ff0000; box-shadow: 0 0 15px #ff0000; animation: scan 2s linear infinite; }
     </style>
 </head>
 <body onload="initLoader()">
 
     <canvas id="matrix-canvas"></canvas>
-    <audio id="bgm" loop><source src="https://files.catbox.moe/pn67vs.mp3" type="audio/mpeg"></audio>
-
-    <button class="theme-btn shadow-lg" onclick="toggleTheme()"><i class="fas fa-sun"></i></button>
+    <audio id="bgm" loop><source src="https://files.catbox.moe/0udojg.mp3" type="audio/mpeg"></audio>
 
     <div id="loader" class="fixed inset-0 bg-black z-[10000] flex flex-col items-center justify-center p-10 font-mono">
         <div class="gold-text text-3xl mb-8 animate-pulse italic">LURAX TITAN</div>
-        <div id="log-terminal" class="text-[8px] text-green-500 w-full max-w-xs h-32 overflow-hidden mb-4 leading-relaxed"></div>
+        <div id="log-term" class="text-[9px] text-green-500 w-full max-w-xs h-32 overflow-hidden mb-4"></div>
         <div class="w-full max-w-xs bg-gray-900 h-1 rounded-full overflow-hidden border border-white/10">
             <div id="loader-bar" class="bg-red-600 h-full w-0 transition-all duration-300"></div>
         </div>
     </div>
 
     <div id="welcome" class="fixed inset-0 z-[9999] hidden flex-col items-center justify-center bg-[#050505]">
-        <div class="absolute top-10 flex gap-1 h-8 items-end">
-            <div class="visualizer-bar h-2"></div><div class="visualizer-bar h-5"></div><div class="visualizer-bar h-3"></div><div class="visualizer-bar h-6"></div><div class="visualizer-bar h-4"></div>
+        <div class="mb-8 relative w-24 h-24 border border-gold/20 rounded-3xl flex items-center justify-center bg-white/5">
+            <i class="fas fa-fingerprint text-6xl text-gold opacity-50"></i>
+            <div class="scanner-line"></div>
         </div>
-        
-        <h1 class="gold-text text-5xl italic mb-2 tracking-tighter">TITAN V4</h1>
-        <div class="h-6 mb-12 text-[10px] tracking-[0.5em] text-red-500 font-bold"><span id="typed"></span></div>
-        
-        <div class="mb-10 relative w-20 h-20 border border-gold/30 rounded-2xl flex items-center justify-center bg-white/5">
-            <i class="fas fa-fingerprint text-5xl text-gold opacity-40"></i>
-            <div class="absolute top-0 w-full h-0.5 bg-red-500 shadow-[0_0_15px_red] animate-scan"></div>
-        </div>
-
-        <button class="btn-vip px-12 py-5 text-[10px] tracking-widest font-black uppercase" onclick="igniteSystem()">Ignite Titan System</button>
+        <h1 class="gold-text text-4xl font-black italic mb-2">SYSTEM ACCESS</h1>
+        <div class="h-6 mb-12 text-[10px] tracking-[0.5em] text-red-600 font-bold"><span id="typed"></span></div>
+        <button class="btn-vip px-12 py-5 text-[11px] tracking-widest font-black uppercase" onclick="ignite()">Authorize</button>
     </div>
 
     <main id="app" class="hidden h-full w-full">
-        <div class="fixed top-0 w-full p-4 flex justify-between items-center z-[1000] bg-black/40 backdrop-blur-md border-b border-gold/10">
-            <div class="text-[9px] font-black gold-text italic">TITAN_CORE: v10.9-STRIKE</div>
-            <div class="text-[9px] font-mono opacity-70" id="clock">00:00:00</div>
-            <div class="text-green-500 text-[9px] font-bold">LATENCY: <span id="ping">12</span>ms</div>
-        </div>
+        <header class="fixed top-0 w-full p-4 flex justify-between items-center z-[1000] bg-black/40 backdrop-blur-md border-b border-gold/10">
+            <div class="text-[9px] font-black gold-text italic">TITAN_OMEGA_v5.0</div>
+            <div class="flex gap-4">
+                <span id="ping" class="text-green-500 text-[9px] font-bold">12ms</span>
+                <span id="clock" class="text-white text-[9px] font-mono">00:00:00</span>
+            </div>
+        </header>
 
         <section class="layer active">
             <div class="glass-card p-8 w-[300px] text-center shadow-2xl">
                 <div class="relative w-28 h-28 mx-auto mb-6">
                     <div class="absolute inset-0 bg-gold rounded-full blur-xl opacity-20 animate-pulse"></div>
-                    <img src="https://files.catbox.moe/ngkxof.jpg" class="relative w-full h-full rounded-full border-2 border-gold object-cover shadow-[0_0_20px_#bf953f]">
+                    <img src="https://files.catbox.moe/ngkxof.jpg" class="relative w-full h-full rounded-full border-2 border-gold object-cover">
                 </div>
                 <h2 class="gold-text text-2xl font-black italic">LURAX & QUEEN</h2>
-                <p class="text-[8px] tracking-[0.4em] opacity-50 uppercase mt-2">Supreme Strike Commanders</p>
-                <div class="flex justify-center gap-3 mt-6">
-                    <span class="text-[7px] bg-green-500/20 text-green-500 px-2 py-1 rounded border border-green-500/30 font-bold uppercase">Safe Inject</span>
-                    <span class="text-[7px] bg-blue-500/20 text-blue-500 px-2 py-1 rounded border border-blue-500/30 font-bold uppercase">Verified</span>
+                <div class="flex justify-center gap-2 mt-4">
+                    <span class="text-[7px] border border-green-500 text-green-500 px-2 py-1 rounded">ANTI-BAN</span>
+                    <span class="text-[7px] border border-blue-500 text-blue-500 px-2 py-1 rounded">VERIFIED</span>
                 </div>
             </div>
         </section>
 
         <section class="layer">
-            <div class="glass-card w-[330px] p-6 border-gold/40">
-                <h3 class="gold-text text-[10px] font-black uppercase mb-4 italic flex items-center gap-2">
-                    <i class="fas fa-microchip animate-spin-slow"></i> Titan Control Panel
-                </h3>
+            <div class="glass-card w-[330px] p-8 flex flex-col items-center bg-gradient-to-b from-neutral-900 to-black">
+                <div class="vinyl-disk mb-8" id="vinyl"></div>
+                
+                <div class="w-full text-left mb-6">
+                    <h3 class="text-white text-lg font-black tracking-tight">MONTAGEM VOZES</h3>
+                    <p class="text-gold text-[10px] font-bold opacity-70">TALENTINHO (SLOWED) - LURAX EDITION</p>
+                </div>
+
+                <div class="flex items-end justify-center h-12 w-full mb-8" id="viz-container"></div>
+
+                <div class="flex items-center gap-8">
+                    <i class="fas fa-step-backward text-xl opacity-50"></i>
+                    <button onclick="toggleMusic()" class="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center text-2xl shadow-xl">
+                        <i id="play-btn" class="fas fa-play ml-1"></i>
+                    </button>
+                    <i class="fas fa-step-forward text-xl opacity-50"></i>
+                </div>
+            </div>
+        </section>
+
+        <section class="layer">
+            <div class="glass-card w-[340px] p-6 h-[450px] flex flex-col">
+                <div class="flex items-center gap-2 mb-4 border-b border-gold/20 pb-2">
+                    <i class="fas fa-brain text-gold"></i>
+                    <h3 class="text-[10px] font-black gold-text uppercase">Neural Code Brain</h3>
+                </div>
+                <div id="chat-box" class="flex-grow overflow-y-auto mb-4 text-[10px] space-y-4 font-mono pr-2 custom-scroll">
+                    <div class="text-gold/50 italic">[System]: Coder Brain Active. Tanya kode atau Joki.</div>
+                </div>
+                <div class="flex gap-2">
+                    <input id="chat-input" type="text" placeholder="Prompt system..." class="bg-white/5 border border-gold/30 rounded-xl px-4 py-3 text-[10px] flex-grow outline-none text-white">
+                    <button onclick="askAI()" class="btn-vip px-5"><i class="fas fa-terminal"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <section class="layer">
+            <div class="glass-card w-[320px] p-6">
+                <h3 class="gold-text text-[10px] font-black uppercase mb-4 italic">Injection Status</h3>
                 <div class="space-y-4">
                     <div class="bg-black/40 p-3 rounded-xl border border-white/5">
                         <div class="flex justify-between text-[8px] mb-2 uppercase font-bold">
-                            <span>Rank Injection Speed</span> 
-                            <span id="rank-name" class="text-gold">Striker</span>
+                            <span>Bypass Progress</span> 
+                            <span id="rank-text" class="text-gold">Striker</span>
                         </div>
                         <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
-                            <div id="rank-bar" class="bg-gradient-to-right from-gold to-red-600 h-full w-0 transition-all duration-500"></div>
+                            <div id="rank-bar" class="bg-gradient-to-r from-red-600 to-gold h-full w-0"></div>
                         </div>
                     </div>
-                    <div class="bg-black/60 p-4 rounded-xl h-32 overflow-hidden font-mono text-[9px] text-red-500 border border-red-500/10">
-                        <p class="text-[7px] text-gray-500 mb-2 border-b border-white/5 uppercase">Real-time Kill Feed:</p>
-                        <div id="kill-feed" class="space-y-1"></div>
+                    <div class="bg-black/60 p-4 rounded-xl h-24 overflow-hidden font-mono text-[9px] text-red-500">
+                        <div id="kill-feed"></div>
                     </div>
+                    <a href="https://wa.me/6288902072245" class="btn-vip block py-4 text-center text-[10px] font-black uppercase tracking-widest mt-4">Execute Order</a>
                 </div>
             </div>
         </section>
 
-        <section class="layer">
-            <div class="glass-card w-[330px] p-6">
-                <div class="flex items-center gap-2 mb-4 border-b border-gold/20 pb-2">
-                    <i class="fas fa-brain text-gold"></i>
-                    <h3 class="text-[10px] font-black gold-text uppercase">Titan Neural AI</h3>
-                </div>
-                <div class="no-scrollbar h-44 overflow-y-auto mb-4 text-[10px] space-y-3 font-mono" id="chat-box">
-                    <div class="text-gold/60 italic">[System]: Brain-Link Established. Ask about Joki.</div>
-                </div>
-                <div class="flex gap-2">
-                    <input id="chat-input" type="text" placeholder="Send prompt..." class="bg-white/5 border border-gold/30 rounded-xl px-4 py-3 text-[10px] flex-grow outline-none text-white focus:border-gold">
-                    <button onclick="askAI()" class="btn-vip px-5"><i class="fas fa-paper-plane"></i></button>
-                </div>
-            </div>
-        </section>
+        <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 flex gap-4 bg-black/60 p-4 rounded-3xl border border-gold/20 backdrop-blur-2xl z-[5000] shadow-2xl">
+            <button onclick="nav(0)" class="text-gold w-10 h-10 text-lg flex items-center justify-center"><i class="fas fa-id-badge"></i></button>
+            <button onclick="nav(1)" class="text-gold w-10 h-10 text-lg flex items-center justify-center"><i class="fas fa-compact-disc"></i></button>
+            <button onclick="nav(2)" class="text-gold w-10 h-10 text-lg flex items-center justify-center"><i class="fas fa-code"></i></button>
+            <button onclick="nav(3)" class="text-gold w-10 h-10 text-lg flex items-center justify-center"><i class="fas fa-skull"></i></button>
+        </nav>
+    </main>
 
-        <section class="layer">
-            <div class="glass-card p-10 w-[300px] text-center">
-                <div class="w-16 h-16 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-600/50">
-                    <i class="fas fa-skull text-3xl text-red-600 animate-pulse"></i>
-                </div>
-                <h3 class="gold-text text-xl mb-2 font-black">UNLEASH TITAN</h3>
-                <p class="text-[8px] text-gray-500 mb-8 uppercase tracking-widest font-bold">Target Rank: Executioner</p>
-                <a href="https://wa.me/6288902072245?text=LURAX_TITAN_ORDER_VIP_GACOR" class="btn-vip block py-5 text-[11px] tracking-[0.4em] font-black uppercase shadow-red-600/20">Connect to Pilot</a>
-            </div>
-        </section>
+    <script>
+        // --- 1. LOADER SYSTEM ---
+        function initLoader() {
+            const logs = ["> Booting Titan Kernel...", "> Injecting Neural Brain...", "> Loading Spotify Hybrid...", "> Bypassing NetEase...", "> Access Ready."];
+            let i = 0;
+            const intv = setInterval(() => {
+                if(i < logs.length) {
+                    document.getElementById('log-term').innerHTML += logs[i] + "<br>";
+                    document.getElementById('loader-bar').style.width = ((i+1)*20) + "%";
+                    i++;
+                } else {
+                    clearInterval(intv);
+                    setTimeout(() => {
+                        document.getElementById('loader').style.display='none';
+                        document.getElementById('welcome').style.display='flex';
+                        new Typed('#typed', { strings: ['SECURE BYPASS', 'CODING MODE', 'TITAN ACTIVE'], typeSpeed: 50, loop: true });
+                    }, 500);
+                }
+            }, 500);
+        }
 
-        <div class="fixed top-20 left-4 glass-card px-3 py-1 text-[8px] border-green-500/30 text-green-500 font-bold z-[1000]">
+        // --- 2. CORE ACTIONS ---
+        function ignite() {
+            document.getElementById('welcome').style.display = 'none';
+            document.getElementById('app').classList.remove('hidden');
+            document.getElementById('bgm').volume = 0.5;
+            startMatrix();
+            initVisualizer();
+            startStatsSim();
+            haptic(100);
+        }
+
+        function nav(idx) {
+            const layers = document.querySelectorAll('.layer');
+            layers.forEach((l, i) => l.classList.toggle('active', i === idx));
+            haptic(30);
+        }
+
+        function haptic(ms) { if(window.navigator.vibrate) window.navigator.vibrate(ms); }
+
+        // --- 3. MUSIC PLAYER LOGIC ---
+        const audio = document.getElementById('bgm');
+        function toggleMusic() {
+            const vinyl = document.getElementById('vinyl');
+            const btn = document.getElementById('play-btn');
+            if(audio.paused) {
+                audio.play(); vinyl.classList.add('playing'); btn.classList.replace('fa-play', 'fa-pause');
+            } else {
+                audio.pause(); vinyl.classList.remove('playing'); btn.classList.replace('fa-pause', 'fa-play');
+            }
+            haptic(50);
+        }
+
+        function initVisualizer() {
+            const cont = document.getElementById('viz-container');
+            for(let i=0; i<20; i++) {
+                const b = document.createElement('div');
+                b.className = 'visual-bar';
+                cont.appendChild(b);
+            }
+            setInterval(() => {
+                if(!audio.paused) {
+                    document.querySelectorAll('.visual-bar').forEach(bar => {
+                        bar.style.height = (Math.random()*40 + 5) + "px";
+                    });
+                }
+            }, 100);
+        }
+
+        // --- 4. CODER AI LOGIC ---
+        function askAI() {
+            const inp = document.getElementById('chat-input');
+            const box = document.getElementById('chat-box');
+            if(!inp.value) return;
+            box.innerHTML += `<div class="text-right text-white"><b>YOU:</b> ${inp.value}</div>`;
+            const v = inp.value.toLowerCase(); inp.value = "";
+            haptic(20);
+            setTimeout(() => {
+                let r = "Neural Brain: Fokus pada Joki Lurax atau koding HTML/JS saja Wak!";
+                if(v.includes("joki")) r = "Joki Lurax Titan: Fast rank, No cheat, Login aman 100%.";
+                if(v.includes("html") || v.includes("kode") || v.includes("bikin")) {
+                    r = `Ini snippet kode koding buat lu Wak:<div class="code-box">&lt;div class="gacor"&gt;<br>  &lt;h1&gt;Lurax King&lt;/h1&gt;<br>&lt;/div&gt;</div>`;
+                }
+                box.innerHTML += `<div class="text-gold"><b>BRAIN-AI:</b> ${r}</div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 800);
+        }
+
+        // --- 5. GACOR SIMULATIONS ---
+        function startMatrix() {
+            const c = document.getElementById('matrix-canvas');
+            const ctx = c.getContext('2d');
+            c.width = window.innerWidth; c.height = window.innerHeight;
+            const drops = Array(Math.floor(c.width/10)).fill(1);
+            setInterval(() => {
+                ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,c.width,c.height);
+                ctx.fillStyle = "#bf953f"; ctx.font = "10px monospace";
+                drops.forEach((y, i) => {
+                    ctx.fillText(Math.random()>0.5?"1":"0", i*10, y*10);
+                    if(y*10 > c.height && Math.random()>0.975) drops[i]=0; drops[i]++;
+                });
+            }, 50);
+        }
+
+        function startStatsSim() {
+            const ranks = ["Striker", "Elite", "Legend", "Executioner"];
+            let rIdx = 0;
+            setInterval(() => {
+                const n = new Date(); document.getElementById('clock').innerText = n.getHours().toString().padStart(2,'0')+":"+n.getMinutes().toString().padStart(2,'0')+":"+n.getSeconds().toString().padStart(2,'0');
+                document.getElementById('ping').innerText = (Math.floor(Math.random()*10)+5) + "ms";
+                
+                let bar = document.getElementById('rank-bar');
+                let w = parseInt(bar.style.width) || 0;
+                if(w < 100) bar.style.width = (w + 10) + "%";
+                else { bar.style.width = "0%"; rIdx = (rIdx + 1) % ranks.length; document.getElementById('rank-text').innerText = ranks[rIdx]; }
+
+                const kf = document.getElementById('kill-feed');
+                const msgs = ["Lurax WIPED SQUAD", "Lurax HEADSHOT Sniper", "Queen KILLED Elite"];
+                const d = document.createElement('div');
+                d.innerHTML = `> ${msgs[Math.floor(Math.random()*msgs.length)]}`;
+                kf.prepend(d);
+                if(kf.children.length > 4) kf.lastChild.remove();
+            }, 3000);
+        }
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+    </script>
+</body>
+</html>
+-green-500 font-bold z-[1000]">
             REVENUE: Rp <span id="revenue">28.450.000</span>
         </div>
         <div class="fixed top-20 right-4 glass-card px-3 py-1 text-[8px] border-red-500/30 text-red-500 font-bold z-[1000]">
