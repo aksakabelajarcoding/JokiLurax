@@ -3,30 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LURAX VIP | BLOOD STRIKE ELITE</title>
+    <title>LURAX VIP | BLOOD STRIKE ELITE SYSTEM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code:wght@300;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code:wght@300;500&family=Poppins:wght@300;600&display=swap');
         
         :root { --gold: #bf953f; --red-blood: #8b0000; --dark: #050505; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: var(--dark); color: white; font-family: 'Poppins', sans-serif; user-select: none; }
+        
         .gold-text { background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Orbitron'; filter: drop-shadow(0 0 8px rgba(191,149,63,0.5)); }
         
-        /* THEMES & GLASS */
+        /* CARD & GLASS EFFECT */
         .glass-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); border: 1px solid rgba(191,149,63,0.3); border-radius: 20px; position: relative; overflow: hidden; }
-        .btn-vip { background: linear-gradient(45deg, #bf953f, #8b0000); box-shadow: 0 0 15px rgba(191,149,63,0.4); border-radius: 50px; transition: 0.3s; font-family: 'Orbitron'; font-weight: 900; color: white; }
+        .btn-vip { background: linear-gradient(45deg, #bf953f, #8b0000); box-shadow: 0 0 15px rgba(191,149,63,0.4); border-radius: 50px; transition: 0.3s; font-family: 'Orbitron'; font-weight: 900; color: white; border: none; cursor: pointer; }
         .btn-vip:hover { transform: scale(1.05); box-shadow: 0 0 30px #ff0000; }
 
-        /* LAYERING */
+        /* LAYER SYSTEM */
         .layer { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1); transform: scale(1.1); padding: 20px; }
         .layer.active { opacity: 1; visibility: visible; transform: scale(1); }
 
-        /* FAKE ELEMENTS */
+        /* SCREENS */
         #hacker-loader { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; padding: 40px; font-family: 'Fira Code'; }
-        #security-alert { position: fixed; inset: 0; background: rgba(139,0,0,0.9); z-index: 20000; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        #welcome-screen { position: fixed; inset: 0; background: radial-gradient(circle, #222 0%, #000 100%); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; transition: 1s cubic-bezier(1, 0, 0, 1); }
+        #security-alert { position: fixed; inset: 0; background: rgba(139,0,0,0.95); z-index: 20000; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         #particle-canvas { position: fixed; inset: 0; z-index: -1; }
         
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
@@ -36,121 +38,217 @@
 <body onload="initHackerMode()">
 
     <canvas id="particle-canvas"></canvas>
-    <audio id="bgm" loop><source src="GANTI_LINK_MP3_LU_DISINI" type="audio/mpeg"></audio>
+    <audio id="bgm" loop><source src="https://files.catbox.moe/pn67vs.mp3" type="audio/mpeg"></audio>
 
     <div id="security-alert">
-        <i class="fas fa-biohazard text-6xl animate-pulse mb-4"></i>
-        <h2 class="text-2xl font-black">SYSTEM BREACH ATTEMPT</h2>
-        <p class="text-xs">TRACING IP... ENCRYPTING YOUR DATA... ACCESS DENIED.</p>
+        <i class="fas fa-biohazard text-6xl animate-pulse mb-4 text-white"></i>
+        <h2 class="text-2xl font-black text-white">SECURITY BREACH DETECTED</h2>
+        <p class="text-xs text-white uppercase">Tracing IP Address... Counter-Measures Active... Access Denied.</p>
     </div>
 
     <div id="hacker-loader">
         <div id="type-terminal" class="text-[10px] text-[#bf953f]"></div>
-        <div class="mt-4 w-full bg-gray-900 h-1 rounded-full"><div id="progress-bar" class="bg-[#bf953f] h-full w-0 transition-all duration-300"></div></div>
+        <div class="mt-4 w-full bg-gray-900 h-1 rounded-full overflow-hidden">
+            <div id="progress-bar" class="bg-[#bf953f] h-full w-0 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <div id="welcome-screen">
+        <h1 class="gold-text text-5xl font-black italic mb-4 text-center">LURAX VIP</h1>
+        <div class="h-8 mb-10 text-xl tracking-[0.3em] text-center"><span id="typed"></span></div>
+        
+        <div class="mb-10 flex flex-col items-center">
+            <div class="relative w-16 h-16 border border-gold/30 rounded-xl flex items-center justify-center">
+                <i class="fas fa-fingerprint text-4xl text-gold opacity-50"></i>
+                <div class="absolute top-0 w-full h-0.5 bg-red-500 shadow-[0_0_15px_red] animate-scan"></div>
+            </div>
+            <p class="text-[8px] mt-2 text-gold animate-pulse tracking-widest uppercase font-bold">Verifying System Identity...</p>
+        </div>
+
+        <button class="btn-vip px-10 py-4 text-sm tracking-widest" onclick="startApp()">EXECUTE SYSTEM</button>
     </div>
 
     <main id="main-ui" class="hidden h-full w-full">
-        <div class="fixed top-0 w-full p-3 flex justify-between text-[8px] bg-black/50 border-b border-gold/20 z-50">
-            <span>SECURE_ID: LURAX-VIP-882</span>
-            <span class="text-green-500 animate-pulse">PING: <span id="ping-val">18</span>ms</span>
+        <div class="fixed top-0 w-full p-3 flex justify-between text-[8px] bg-black/50 border-b border-gold/20 z-[500] font-mono">
+            <span>CORE: LURAX-BS-V4.2</span>
+            <span class="text-green-500 font-bold">PING: <span id="ping-val">18</span>ms</span>
             <span id="clock">00:00:00</span>
         </div>
 
-        <div class="fixed top-12 right-4 z-50 glass-card px-3 py-1 flex items-center gap-2 border-red-500/30">
-            <span class="flex h-2 w-2"><span class="animate-ping absolute h-2 w-2 rounded-full bg-red-400"></span><span class="rounded-full h-2 w-2 bg-red-500"></span></span>
-            <span class="text-[10px] font-bold italic"><span id="live-users">2147</span> ONLINE</span>
-        </div>
-
-        <div class="fixed top-12 left-4 z-50 glass-card px-3 py-1 border-green-500/30">
-            <p class="text-[7px] text-gray-400">TOTAL_SUCCESS</p>
+        <div class="fixed top-12 left-4 z-[500] glass-card px-3 py-1 border-green-500/30">
+            <p class="text-[7px] text-gray-400">TOTAL_REVENUE</p>
             <p class="text-[10px] font-black text-green-500">Rp <span id="revenue">28.450.000</span></p>
         </div>
 
+        <div class="fixed top-12 right-4 z-[500] glass-card px-3 py-1 flex items-center gap-2 border-red-500/30">
+            <span class="relative flex h-2 w-2"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="rounded-full h-2 w-2 bg-red-500"></span></span>
+            <span class="text-[10px] font-bold"><span id="live-users">2147</span> ONLINE</span>
+        </div>
+
         <section class="layer active">
-            <div class="glass-card p-6 w-full max-w-[320px] text-center">
-                <div class="relative w-28 h-28 mx-auto mb-4">
-                    <div class="absolute inset-0 bg-red-600 rounded-full blur-md opacity-50 animate-pulse"></div>
-                    <img src="FOTO_LU_CEWE" class="relative rounded-full border-2 border-gold w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/150?text=LURAX'">
-                </div>
-                <h1 class="gold-text text-xl font-black italic">LURAX & QUEEN</h1>
-                <p class="text-[8px] tracking-[0.4em] text-gray-500 mb-4">BLOOD STRIKE SPECIALIST</p>
-                <div id="scanner" class="flex flex-col items-center">
-                    <div class="relative w-12 h-12 border border-gold/30 rounded flex items-center justify-center">
-                        <i class="fas fa-fingerprint text-2xl text-gold opacity-50"></i>
-                        <div class="absolute top-0 w-full h-0.5 bg-red-500 shadow-[0_0_10px_red] animate-scan"></div>
+            <div class="glass-card p-1 w-[300px]">
+                <div class="bg-[#0a0a0a] rounded-[19px] p-8 text-center">
+                    <div class="relative w-28 h-28 mx-auto mb-6">
+                        <div class="absolute inset-0 bg-red-600 rounded-full blur-md opacity-40 animate-pulse"></div>
+                        <img src="https://files.catbox.moe/ngkxof.jpg" class="relative rounded-full border-2 border-gold w-full h-full object-cover shadow-[0_0_20px_#bf953f]">
                     </div>
+                    <h2 class="gold-text text-xl font-black italic uppercase">Lurax & Queen</h2>
+                    <p class="text-[8px] tracking-[0.3em] text-gray-500 mt-2">BLOOD STRIKE SPECIALIST</p>
                 </div>
             </div>
         </section>
 
         <section class="layer">
             <div class="w-full max-w-[320px] space-y-4">
-                <div class="glass-card p-4">
-                    <h3 class="gold-text text-xs mb-2 italic">LIVE_PROGRESS #9921</h3>
-                    <div class="w-full bg-black h-1 rounded-full"><div class="bg-red-600 h-full w-[85%] animate-pulse shadow-[0_0_10px_red]"></div></div>
-                    <p class="text-[7px] mt-2 text-gray-500">Striker -> Legendary [85%]</p>
+                <div class="glass-card p-5">
+                    <div class="flex justify-between text-[8px] mb-2 font-bold text-red-500 font-mono">
+                        <span>LIVE_INJECT: #BS-ORDER</span>
+                        <span>92% DONE</span>
+                    </div>
+                    <div class="w-full bg-black h-1.5 rounded-full overflow-hidden border border-red-900/30">
+                        <div class="bg-red-600 h-full w-[92%] shadow-[0_0_15px_red] animate-pulse"></div>
+                    </div>
+                    <p class="text-[7px] mt-2 text-gray-500">Target: Gold ➔ Executioner Rank</p>
                 </div>
-                <div class="glass-card p-4 space-y-2 text-[9px]">
-                    <p class="border-l-2 border-gold pl-2">"Gila, Blood Strike gue langsung rata musuhnya!" - @UserX</p>
-                    <p class="border-l-2 border-gold pl-2">"Lurax emang gak ada obat, fast hand parah." - @Striker01</p>
+                <div class="glass-card p-4 space-y-3 text-[9px] italic text-gray-400">
+                    <p class="border-l-2 border-gold pl-3">"Gila, squad musuh dibantai habis sama Lurax!"</p>
+                    <p class="border-l-2 border-gold pl-3">"Aman banget, akun login langsung Win Streak."</p>
                 </div>
             </div>
         </section>
 
         <section class="layer">
-            <div class="glass-card p-8 w-full max-w-[320px] text-center">
-                <i class="fas fa-skull-crossbones text-4xl text-red-600 mb-4"></i>
-                <h2 class="gold-text text-lg mb-6 tracking-tighter">READY FOR DOMINATION?</h2>
-                <a href="https://wa.me/6281234567890?text=ORDER_LURAX_VIP" class="btn-vip block py-4 text-xs tracking-widest">WHATSAPP ADMIN</a>
-                <p class="text-[8px] mt-4 text-gray-600 italic">"Admin is typing..." <span class="animate-pulse">|</span></p>
+            <div class="glass-card p-8 w-[300px] text-center">
+                <i class="fas fa-crosshairs text-4xl text-red-600 mb-6 animate-pulse"></i>
+                <h3 class="gold-text text-lg mb-8 font-black uppercase tracking-tighter">READY TO STRIKE?</h3>
+                <a href="https://wa.me/6288902072245?text=HALO_LURAX_SAYA_MAU_ORDER_JOKI_VIP" class="btn-vip block py-4 text-[10px] tracking-[0.3em] uppercase">Connect to WhatsApp</a>
+                <p class="text-[8px] mt-6 text-gray-500 italic">"Lurax is typing..." <span class="animate-pulse">|</span></p>
             </div>
         </section>
 
-        <nav class="fixed bottom-10 left-1/2 -translate-x-1/2 flex gap-4 bg-black/60 p-4 rounded-3xl border border-gold/20 backdrop-blur-md z-50">
-            <button onclick="showLayer(0)" class="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold"><i class="fas fa-home"></i></button>
-            <button onclick="showLayer(1)" class="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold"><i class="fas fa-fire"></i></button>
-            <button onclick="showLayer(2)" class="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold"><i class="fas fa-shopping-cart"></i></button>
+        <nav class="fixed bottom-10 left-1/2 -translate-x-1/2 flex gap-5 bg-black/60 p-4 rounded-3xl border border-gold/20 backdrop-blur-md z-[1000]">
+            <button onclick="showLayer(0)" class="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold transition hover:bg-gold hover:text-black"><i class="fas fa-user-shield"></i></button>
+            <button onclick="showLayer(1)" class="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold transition hover:bg-gold hover:text-black"><i class="fas fa-bolt"></i></button>
+            <button onclick="showLayer(2)" class="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold transition hover:bg-gold hover:text-black"><i class="fas fa-skull"></i></button>
         </nav>
 
-        <div id="fake-notif" class="fixed top-20 left-1/2 -translate-x-1/2 z-[6000] transition-all duration-500 opacity-0 scale-90">
-            <div class="glass-card px-4 py-2 border-green-500/50 flex items-center gap-3 bg-black">
+        <div id="fake-notif" class="fixed top-24 left-1/2 -translate-x-1/2 z-[2000] transition-all duration-500 opacity-0 scale-90">
+            <div class="glass-card px-5 py-2 border-green-500/40 flex items-center gap-3 bg-black/90">
                 <i class="fas fa-check-circle text-green-500"></i>
-                <div class="text-[9px]"><p id="notif-text" class="font-bold"></p><p class="text-gray-500">Order successfully completed</p></div>
+                <div class="text-[9px] font-bold"><p id="notif-text" class="text-white uppercase"></p><p class="text-gray-500 text-[7px] uppercase">Payment Success - Processing Tier</p></div>
             </div>
         </div>
 
-        <div id="strike-log" class="fixed bottom-32 left-4 text-[8px] font-mono text-red-500/70 space-y-1"></div>
+        <div id="strike-log" class="fixed bottom-32 left-4 text-[8px] font-mono text-red-500/60 space-y-1 z-[100]"></div>
     </main>
 
     <script>
-        // 1. CLOCK & PING
+        // 1. SYSTEM STATS
         setInterval(() => {
-            const n = new Date(); document.getElementById('clock').innerText = n.getHours().toString().padStart(2,'0')+":"+n.getMinutes().toString().padStart(2,'0')+":"+n.getSeconds().toString().padStart(2,'0');
-            document.getElementById('ping-val').innerText = Math.floor(Math.random()*20)+15;
+            const n = new Date(); 
+            document.getElementById('clock').innerText = n.getHours().toString().padStart(2,'0')+":"+n.getMinutes().toString().padStart(2,'0')+":"+n.getSeconds().toString().padStart(2,'0');
+            document.getElementById('ping-val').innerText = Math.floor(Math.random()*15)+10;
         }, 1000);
 
-        // 2. HACKER LOADER
+        // 2. BOOTLOADER
         function initHackerMode() {
             const term = document.getElementById('type-terminal');
-            const lines = ["> INIT LURAX_VIP_v4.2...", "> BYPASSING BLOODSTRIKE_SEC...", "> INJECTING AIM_STABILIZER...", "> ACCESS GRANTED. WELCOME BOSS."];
-            let i = 0, p = 0;
+            const bar = document.getElementById('progress-bar');
+            const lines = ["> BOOTING LURAX_VIP_CORE...", "> BYPASSING BLOODSTRIKE_FIREWALL...", "> INJECTING WIN_STREAK_SCRIPT...", "> ACCESS GRANTED. WELCOME MASTER."];
+            let i = 0;
             const intv = setInterval(() => {
-                if(i < lines.length) { term.innerHTML += lines[i]+"<br>"; i++; p+=25; document.getElementById('progress-bar').style.width = p+"%"; }
-                else { clearInterval(intv); setTimeout(() => { document.getElementById('hacker-loader').style.display='none'; document.getElementById('main-ui').classList.remove('hidden'); startGacorSystems(); }, 1000); }
+                if(i < lines.length) { term.innerHTML += lines[i] + "<br>"; bar.style.width = ((i + 1) * 25) + "%"; i++; }
+                else { clearInterval(intv); setTimeout(() => { document.getElementById('hacker-loader').style.display = 'none'; document.getElementById('welcome-screen').style.display = 'flex'; initTyped(); }, 800); }
             }, 600);
         }
 
-        // 3. LAYER SYSTEM
-        function showLayer(idx) {
-            const layers = document.querySelectorAll('.layer');
-            layers.forEach((l, i) => l.classList.toggle('active', i === idx));
-            if(window.navigator.vibrate) window.navigator.vibrate(30);
+        // 3. TEXT ANIMATION
+        function initTyped() {
+            new Typed('#typed', {
+                strings: ['AUTO WIN STREAK', 'EXECUTIONER RANK', 'SQUAD WIPE MASTER', 'BLOOD STRIKE ELITE'],
+                typeSpeed: 60, backSpeed: 40, loop: true
+            });
         }
 
-        // 4. GACOR SYSTEMS (LIVE COUNTERS & NOTIFS)
+        // 4. LAUNCH APP
+        function startApp() {
+            const welcome = document.getElementById('welcome-screen');
+            welcome.style.transform = 'translateY(-100%)';
+            welcome.style.opacity = '0';
+            setTimeout(() => {
+                welcome.style.display = 'none';
+                document.getElementById('main-ui').classList.remove('hidden');
+                document.getElementById('main-ui').classList.add('animate__animated', 'animate__fadeIn');
+                startGacorSystems();
+            }, 800);
+            document.getElementById('bgm').play().catch(() => console.log("Gesture Needed"));
+        }
+
+        // 5. LIVE GACOR LOGIC
         function startGacorSystems() {
-            // Live Users
+            // Live Users (Min 2000)
             setInterval(() => {
+                let el = document.getElementById('live-users');
+                let val = parseInt(el.innerText);
+                val += (Math.floor(Math.random() * 9) - 4);
+                if (val < 2000) val = 2150;
+                el.innerText = val;
+                
+                // Revenue counter
+                let revEl = document.getElementById('revenue');
+                let revVal = parseInt(revEl.innerText.replace(/\./g, ''));
+                revEl.innerText = (revVal + 5000).toLocaleString('id-ID');
+            }, 3000);
+
+            // Fake Success Notification
+            const players = ["Andi_Striker", "Sultan_Gacor", "King_BS", "Rizky_VIP", "Squad_Wiper"];
+            setInterval(() => {
+                const n = document.getElementById('fake-notif');
+                document.getElementById('notif-text').innerText = players[Math.floor(Math.random()*players.length)] + " ORDERED";
+                n.style.opacity = "1"; n.style.transform = "translateX(-50%) translateY(20px) scale(1)";
+                setTimeout(() => { n.style.opacity = "0"; n.style.transform = "translateX(-50%) translateY(0) scale(0.9)"; }, 4000);
+            }, 10000);
+
+            // Strike Log
+            setInterval(() => {
+                const log = document.getElementById('strike-log');
+                const div = document.createElement('div');
+                div.innerHTML = `> [!] Squad Wipe by Lurax in Valley...`;
+                log.appendChild(div);
+                if(log.children.length > 3) log.removeChild(log.firstChild);
+                setTimeout(() => div.remove(), 5000);
+            }, 7000);
+        }
+
+        // 6. NAVIGATION
+        function showLayer(idx) {
+            const layers = document.querySelectorAll('.layer');
+            const navBtns = document.querySelectorAll('nav button');
+            layers.forEach((l, i) => {
+                l.classList.toggle('active', i === idx);
+                navBtns[i].classList.toggle('bg-gold', i === idx);
+                navBtns[i].classList.toggle('text-black', i === idx);
+            });
+            if(window.navigator.vibrate) window.navigator.vibrate(25);
+        }
+
+        // 7. SECURITY (ANTI-INSPECT)
+        document.addEventListener('contextmenu', e => { e.preventDefault(); showSec(); });
+        document.onkeydown = e => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) { showSec(); return false; } };
+        function showSec() { const s = document.getElementById('security-alert'); s.style.display = 'flex'; setTimeout(() => s.style.display = 'none', 2000); }
+
+        // 8. BACKGROUND PARTICLES
+        const canvas = document.getElementById('particle-canvas'); const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let pts = [];
+        class P { constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.v=Math.random()*0.4;} update(){this.y-=this.v;if(this.y<0)this.y=canvas.height;} draw(){ctx.fillStyle='rgba(191,149,63,0.15)';ctx.beginPath();ctx.arc(this.x,this.y,1,0,Math.PI*2);ctx.fill();} }
+        for(let i=0;i<50;i++) pts.push(new P());
+        function anim(){ ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(anim); }
+        anim();
+    </script>
+</body>
+</html>
+setInterval(() => {
                 let current = parseInt(document.getElementById('live-users').innerText);
                 document.getElementById('live-users').innerText = (current + (Math.floor(Math.random()*11)-5));
                 // Revenue counter
