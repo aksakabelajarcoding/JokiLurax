@@ -3,581 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LURAX TITAN | THE FORBIDDEN CODE</title>
+    <title>LURAX TITAN | 30-GACOR OMEGA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code:wght@300;500&family=Poppins:wght@300;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code:wght@500&family=Syncopate:wght@700&display=swap');
         
-        :root { --gold: #bf953f; --red: #ff0000; --bg: #030303; --card: rgba(255,255,255,0.02); --text: white; }
-        .light-mode { --bg: #ffffff; --card: rgba(0,0,0,0.05); --text: #111; }
+        :root { --red: #ff003c; --bg: #050505; --white: #ffffff; }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: var(--white); font-family: 'Orbitron', sans-serif; overflow-x: hidden; height: 100vh; cursor: crosshair; }
 
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; transition: 0.5s; user-select: none; }
-        
-        .gold-text { background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Orbitron'; font-weight: 900; }
-        .glass-card { background: var(--card); backdrop-filter: blur(20px); border: 1px solid rgba(191,149,63,0.2); border-radius: 30px; position: relative; overflow: hidden; }
-        
-        .btn-vip { background: linear-gradient(45deg, #8b0000, #ff0000); box-shadow: 0 0 20px rgba(255,0,0,0.4); border-radius: 15px; color: white; border: none; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; }
-        .btn-vip:active { transform: scale(0.95); }
+        /* 11. Glitch Effect */
+        .glitch { position: relative; font-family: 'Syncopate'; font-weight: 900; }
+        .glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .glitch::before { left: 2px; text-shadow: -2px 0 red; clip: rect(44px, 450px, 56px, 0); animation: gl 3s infinite linear; }
 
-        .layer { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); transform: translateY(30px); padding: 20px; }
-        .layer.active { opacity: 1; visibility: visible; transform: translateY(0); }
-
-        #matrix-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.15; pointer-events: none; }
-        
-        /* SPOTIFY STYLE CSS */
-        .vinyl-disk { width: 180px; height: 180px; background: radial-gradient(circle, #222 0%, #000 100%); border-radius: 50%; border: 4px solid #111; position: relative; animation: spin 4s linear infinite; animation-play-state: paused; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+        /* 5. Vinyl & 6. Visualizer */
+        .vinyl-disk { width: 220px; height: 220px; background: #000; border-radius: 50%; border: 4px solid #111; animation: spin 2s linear infinite paused; position: relative; box-shadow: 0 0 40px var(--red); }
         .vinyl-disk.playing { animation-play-state: running; }
-        .vinyl-disk::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 60px; height: 60px; background: url('https://files.catbox.moe/ngkxof.jpg'); background-size: cover; border-radius: 50%; border: 2px solid var(--gold); }
+        .vinyl-disk::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70px; height: 70px; background: url('https://files.catbox.moe/ngkxof.jpg'); background-size: cover; border-radius: 50%; border: 3px solid var(--red); }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        /* Layout Scroll System */
+        .scroll-wrapper { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
+        .section { height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; padding: 20px; }
+        .scroll-wrapper::-webkit-scrollbar { display: none; }
 
-        .visual-bar { width: 4px; background: var(--gold); margin: 0 2px; border-radius: 10px; transition: height 0.1s; height: 5px; }
-        
-        /* CODE BLOCK AI */
-        .code-box { background: #0d0d0d; color: #00ff41; padding: 12px; border-radius: 10px; font-family: 'Fira Code', monospace; font-size: 9px; border-left: 4px solid var(--gold); margin-top: 8px; overflow-x: auto; white-space: pre; }
-        
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-        .scanner-line { position: absolute; width: 100%; height: 2px; background: #ff0000; box-shadow: 0 0 15px #ff0000; animation: scan 2s linear infinite; }
+        /* 13. Toast & 16. Particle */
+        #toast { position: fixed; top: 100px; right: 20px; background: black; border-left: 4px solid var(--red); padding: 15px; font-size: 8px; transform: translateX(200%); transition: 0.5s; z-index: 10000; }
+        #toast.show { transform: translateX(0); }
+        .particle { position: absolute; width: 4px; height: 4px; background: var(--red); pointer-events: none; border-radius: 50%; z-index: 10000; }
+
+        /* 4. Strobe */
+        .strobe { animation: flash 0.1s infinite alternate; }
+        @keyframes flash { from { opacity: 1; } to { opacity: 0.8; } }
+
+        #matrix-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.2; }
+        .glass { background: rgba(0,0,0,0.9); border: 1px solid rgba(255,0,60,0.3); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body onload="initLoader()">
+<body onload="initAll()">
 
     <canvas id="matrix-canvas"></canvas>
     <audio id="bgm" loop><source src="https://files.catbox.moe/0udojg.mp3" type="audio/mpeg"></audio>
 
-    <div id="loader" class="fixed inset-0 bg-black z-[10000] flex flex-col items-center justify-center p-10 font-mono">
-        <div class="gold-text text-3xl mb-8 animate-pulse italic">LURAX TITAN</div>
-        <div id="log-term" class="text-[9px] text-green-500 w-full max-w-xs h-32 overflow-hidden mb-4"></div>
-        <div class="w-full max-w-xs bg-gray-900 h-1 rounded-full overflow-hidden border border-white/10">
-            <div id="loader-bar" class="bg-red-600 h-full w-0 transition-all duration-300"></div>
-        </div>
+    <div id="loader" class="fixed inset-0 bg-black z-[50000] flex flex-col items-center justify-center p-10 font-mono">
+        <div class="glitch text-3xl mb-4" data-text="LURAX_TITAN">LURAX_TITAN</div>
+        <div id="log" class="text-[9px] text-red-600 mb-6 h-24 overflow-hidden"></div>
+        <div class="w-64 h-1 bg-neutral-900"><div id="bar" class="h-full bg-red-600 w-0"></div></div>
     </div>
 
-    <div id="welcome" class="fixed inset-0 z-[9999] hidden flex-col items-center justify-center bg-[#050505]">
-        <div class="mb-8 relative w-24 h-24 border border-gold/20 rounded-3xl flex items-center justify-center bg-white/5">
-            <i class="fas fa-fingerprint text-6xl text-gold opacity-50"></i>
-            <div class="scanner-line"></div>
+    <div id="auth" class="fixed inset-0 z-[40000] hidden flex flex-col items-center justify-center bg-black">
+        <div class="w-32 h-32 border border-white/10 mb-8 flex items-center justify-center relative" onclick="startApp()">
+            <i class="fas fa-fingerprint text-6xl text-red-600 animate-pulse"></i>
+            <div class="absolute w-full h-1 bg-red-600 shadow-[0_0_15px_red] animate-bounce top-0"></div>
         </div>
-        <h1 class="gold-text text-4xl font-black italic mb-2">SYSTEM ACCESS</h1>
-        <div class="h-6 mb-12 text-[10px] tracking-[0.5em] text-red-600 font-bold"><span id="typed"></span></div>
-        <button class="btn-vip px-12 py-5 text-[11px] tracking-widest font-black uppercase" onclick="ignite()">Authorize</button>
+        <div class="text-[10px] tracking-[5px] text-white/50 uppercase">Authenticate Pilot</div>
     </div>
 
-    <main id="app" class="hidden h-full w-full">
-        <header class="fixed top-0 w-full p-4 flex justify-between items-center z-[1000] bg-black/40 backdrop-blur-md border-b border-gold/10">
-            <div class="text-[9px] font-black gold-text italic">TITAN_OMEGA_v5.0</div>
-            <div class="flex gap-4">
-                <span id="ping" class="text-green-500 text-[9px] font-bold">12ms</span>
-                <span id="clock" class="text-white text-[9px] font-mono">00:00:00</span>
+    <div id="app" class="hidden scroll-wrapper">
+        
+        <header class="fixed top-0 w-full p-5 flex justify-between items-center z-[10000] glass border-b border-red-600/20">
+            <div class="text-xs font-black text-red-600">TITAN_V10</div>
+            <div class="flex gap-4 text-[8px] font-mono">
+                <span>IP: <span id="ip">112.91.*.*</span></span>
+                <span class="text-green-500">PING: <span id="ping">12ms</span></span>
+                <span class="text-red-500">LIVE: <span id="visitors">2,401</span></span>
             </div>
         </header>
 
-        <section class="layer active">
-            <div class="glass-card p-8 w-[300px] text-center shadow-2xl">
-                <div class="relative w-28 h-28 mx-auto mb-6">
-                    <div class="absolute inset-0 bg-gold rounded-full blur-xl opacity-20 animate-pulse"></div>
-                    <img src="https://files.catbox.moe/ngkxof.jpg" class="relative w-full h-full rounded-full border-2 border-gold object-cover">
+        <div class="fixed top-20 left-1/2 -translate-x-1/2 z-[500]">
+            <span class="bg-red-600 text-white text-[8px] px-3 py-1 font-bold">PROMO VVIP: <span id="timer">05:00</span></span>
+        </div>
+
+        <div id="toast">SYSTEM: <span id="msg">New Order!</span></div>
+
+        <section class="section">
+            <div class="glass p-10 w-[300px] text-center relative">
+                <div class="text-[8px] mb-4 text-red-600" id="greet">GOOD NIGHT, PILOT</div>
+                <div class="relative w-28 h-28 mx-auto mb-6" onclick="copyID()">
+                    <img src="https://files.catbox.moe/ngkxof.jpg" class="w-full h-full object-cover border-2 border-red-600">
+                    <i class="fas fa-crown absolute -top-4 -right-4 text-yellow-500 animate-bounce"></i>
                 </div>
-                <h2 class="gold-text text-2xl font-black italic">LURAX & QUEEN</h2>
-                <div class="flex justify-center gap-2 mt-4">
-                    <span class="text-[7px] border border-green-500 text-green-500 px-2 py-1 rounded">ANTI-BAN</span>
-                    <span class="text-[7px] border border-blue-500 text-blue-500 px-2 py-1 rounded">VERIFIED</span>
-                </div>
+                <h2 class="text-xl font-black italic">LURAX & QUEEN</h2>
+                <div id="copy-note" class="text-[7px] text-green-500 mt-2 opacity-0">ID COPIED</div>
             </div>
         </section>
 
-        <section class="layer">
-            <div class="glass-card w-[330px] p-8 flex flex-col items-center bg-gradient-to-b from-neutral-900 to-black">
+        <section class="section">
+            <div class="glass p-8 w-[340px] flex flex-col items-center">
                 <div class="vinyl-disk mb-8" id="vinyl"></div>
-                
-                <div class="w-full text-left mb-6">
-                    <h3 class="text-white text-lg font-black tracking-tight">MONTAGEM VOZES</h3>
-                    <p class="text-gold text-[10px] font-bold opacity-70">TALENTINHO (SLOWED) - LURAX EDITION</p>
-                </div>
+                <div id="viz" class="flex items-end h-16 gap-1 mb-8"></div>
+                <button onclick="playMusic()" class="bg-white text-black w-16 h-16 rounded-full text-2xl shadow-[0_0_20px_white]">
+                    <i id="ctrl" class="fas fa-play"></i>
+                </button>
+            </div>
+        </section>
 
-                <div class="flex items-end justify-center h-12 w-full mb-8" id="viz-container"></div>
-
-                <div class="flex items-center gap-8">
-                    <i class="fas fa-step-backward text-xl opacity-50"></i>
-                    <button onclick="toggleMusic()" class="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center text-2xl shadow-xl">
-                        <i id="play-btn" class="fas fa-play ml-1"></i>
-                    </button>
-                    <i class="fas fa-step-forward text-xl opacity-50"></i>
+        <section class="section">
+            <div class="glass w-[340px] p-6 h-[400px] flex flex-col">
+                <div class="text-[9px] mb-4 font-bold border-b border-red-600 pb-2">NEURAL_AI_v10</div>
+                <div id="chat" class="flex-grow overflow-y-auto text-[9px] font-mono space-y-3 pr-2"></div>
+                <div class="flex gap-2 mt-4">
+                    <input id="input" type="text" placeholder="Command..." class="bg-white/5 border border-white/20 p-3 text-[9px] flex-grow">
+                    <button onclick="ai()" class="bg-red-600 px-4 text-[10px]"><i class="fas fa-code"></i></button>
                 </div>
             </div>
         </section>
 
-        <section class="layer">
-            <div class="glass-card w-[340px] p-6 h-[450px] flex flex-col">
-                <div class="flex items-center gap-2 mb-4 border-b border-gold/20 pb-2">
-                    <i class="fas fa-brain text-gold"></i>
-                    <h3 class="text-[10px] font-black gold-text uppercase">Neural Code Brain</h3>
+        <section class="section">
+            <div class="glass p-8 w-[310px]">
+                <div class="text-[10px] font-black mb-6">SYSTEM MONITOR</div>
+                <div class="space-y-4 mb-8">
+                    <div class="text-[8px]">CPU USAGE: <div class="w-full h-1 bg-white/10 mt-1"><div class="h-full bg-red-600" style="width: 78%"></div></div></div>
+                    <div class="text-[8px]">RANK INJECTION: <div class="w-full h-1 bg-white/10 mt-1"><div id="rank-bar" class="h-full bg-white w-0 transition-all"></div></div></div>
                 </div>
-                <div id="chat-box" class="flex-grow overflow-y-auto mb-4 text-[10px] space-y-4 font-mono pr-2 custom-scroll">
-                    <div class="text-gold/50 italic">[System]: Coder Brain Active. Tanya kode atau Joki.</div>
-                </div>
-                <div class="flex gap-2">
-                    <input id="chat-input" type="text" placeholder="Prompt system..." class="bg-white/5 border border-gold/30 rounded-xl px-4 py-3 text-[10px] flex-grow outline-none text-white">
-                    <button onclick="askAI()" class="btn-vip px-5"><i class="fas fa-terminal"></i></button>
-                </div>
+                <a href="https://wa.me/6288902072245" class="block bg-red-600 py-4 text-center text-[10px] font-black tracking-widest">ORDER NOW</a>
             </div>
         </section>
 
-        <section class="layer">
-            <div class="glass-card w-[320px] p-6">
-                <h3 class="gold-text text-[10px] font-black uppercase mb-4 italic">Injection Status</h3>
-                <div class="space-y-4">
-                    <div class="bg-black/40 p-3 rounded-xl border border-white/5">
-                        <div class="flex justify-between text-[8px] mb-2 uppercase font-bold">
-                            <span>Bypass Progress</span> 
-                            <span id="rank-text" class="text-gold">Striker</span>
-                        </div>
-                        <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
-                            <div id="rank-bar" class="bg-gradient-to-r from-red-600 to-gold h-full w-0"></div>
-                        </div>
-                    </div>
-                    <div class="bg-black/60 p-4 rounded-xl h-24 overflow-hidden font-mono text-[9px] text-red-500">
-                        <div id="kill-feed"></div>
-                    </div>
-                    <a href="https://wa.me/6288902072245" class="btn-vip block py-4 text-center text-[10px] font-black uppercase tracking-widest mt-4">Execute Order</a>
-                </div>
-            </div>
-        </section>
-
-        <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 flex gap-4 bg-black/60 p-4 rounded-3xl border border-gold/20 backdrop-blur-2xl z-[5000] shadow-2xl">
-            <button onclick="nav(0)" class="text-gold w-10 h-10 text-lg flex items-center justify-center"><i class="fas fa-id-badge"></i></button>
-            <button onclick="nav(1)" class="text-gold w-10 h-10 text-lg flex items-center justify-center"><i class="fas fa-compact-disc"></i></button>
-            <button onclick="nav(2)" class="text-gold w-10 h-10 text-lg flex items-center justify-center"><i class="fas fa-code"></i></button>
-            <button onclick="nav(3)" class="text-gold w-10 h-10 text-lg flex items-center justify-center"><i class="fas fa-skull"></i></button>
-        </nav>
-    </main>
+        <a href="https://wa.me/6288902072245" class="fixed bottom-10 right-10 w-14 h-14 bg-green-600 rounded-full flex items-center justify-center text-2xl z-[5000] animate-bounce"><i class="fab fa-whatsapp"></i></a>
+    </div>
 
     <script>
-        // --- 1. LOADER SYSTEM ---
-        function initLoader() {
-            const logs = ["> Booting Titan Kernel...", "> Injecting Neural Brain...", "> Loading Spotify Hybrid...", "> Bypassing NetEase...", "> Access Ready."];
-            let i = 0;
-            const intv = setInterval(() => {
+        // 1. LOADER & 2. AUTH
+        function initAll() {
+            let i = 0; const logs = ["> Booting...", "> Loading 30 Features...", "> Syncing MP3...", "> System Ready."];
+            const t = setInterval(() => {
                 if(i < logs.length) {
-                    document.getElementById('log-term').innerHTML += logs[i] + "<br>";
-                    document.getElementById('loader-bar').style.width = ((i+1)*20) + "%";
+                    document.getElementById('log').innerHTML += logs[i] + "<br>";
+                    document.getElementById('bar').style.width = ((i+1)*25) + "%";
                     i++;
                 } else {
-                    clearInterval(intv);
-                    setTimeout(() => {
-                        document.getElementById('loader').style.display='none';
-                        document.getElementById('welcome').style.display='flex';
-                        new Typed('#typed', { strings: ['SECURE BYPASS', 'CODING MODE', 'TITAN ACTIVE'], typeSpeed: 50, loop: true });
-                    }, 500);
+                    clearInterval(t); document.getElementById('loader').style.display='none'; document.getElementById('auth').style.display='flex';
                 }
+            }, 600);
+            
+            // 22. Greeting
+            const h = new Date().getHours();
+            const g = h<12 ? "GOOD MORNING" : h<18 ? "GOOD AFTERNOON" : "GOOD NIGHT";
+            document.getElementById('greet').innerText = g + ", PILOT";
+        }
+
+        function startApp() {
+            document.getElementById('auth').style.display='none';
+            document.getElementById('app').classList.remove('hidden');
+            startMatrix(); startSims();
+        }
+
+        // 5 & 6. MUSIC ENGINE
+        const audio = document.getElementById('bgm');
+        function playMusic() {
+            const v = document.getElementById('vinyl');
+            const c = document.getElementById('ctrl');
+            if(audio.paused) { 
+                audio.play(); v.classList.add('playing'); c.className = "fas fa-pause"; 
+                document.body.classList.add('strobe'); // 4. Strobe
+            } else { 
+                audio.pause(); v.classList.remove('playing'); c.className = "fas fa-play";
+                document.body.classList.remove('strobe');
+            }
+        }
+
+        // Visualizer (6)
+        const vCont = document.getElementById('viz');
+        for(let i=0; i<15; i++) { const b = document.createElement('div'); b.className = 'viz-bar'; vCont.appendChild(b); }
+        setInterval(() => {
+            if(!audio.paused) {
+                document.querySelectorAll('.viz-bar').forEach(b => b.style.height = Math.random()*100 + "%");
+            }
+        }, 100);
+
+        // 7. AI & 30. Auto-Type
+        function ai() {
+            const inp = document.getElementById('input');
+            const box = document.getElementById('chat');
+            if(!inp.value) return;
+            box.innerHTML += `<div class="text-right">> ${inp.value}</div>`;
+            const v = inp.value.toLowerCase(); inp.value = "";
+            setTimeout(() => {
+                let r = "Titan: System override active.";
+                if(v.includes("joki")) r = "Status: Online. Slot Legends available.";
+                box.innerHTML += `<div class="text-red-500">TITAN_AI: ${r}</div>`;
+                box.scrollTop = box.scrollHeight;
             }, 500);
         }
 
-        // --- 2. CORE ACTIONS ---
-        function ignite() {
-            document.getElementById('welcome').style.display = 'none';
-            document.getElementById('app').classList.remove('hidden');
-            document.getElementById('bgm').volume = 0.5;
-            startMatrix();
-            initVisualizer();
-            startStatsSim();
-            haptic(100);
-        }
-
-        function nav(idx) {
-            const layers = document.querySelectorAll('.layer');
-            layers.forEach((l, i) => l.classList.toggle('active', i === idx));
-            haptic(30);
-        }
-
-        function haptic(ms) { if(window.navigator.vibrate) window.navigator.vibrate(ms); }
-
-        // --- 3. MUSIC PLAYER LOGIC ---
-        const audio = document.getElementById('bgm');
-        function toggleMusic() {
-            const vinyl = document.getElementById('vinyl');
-            const btn = document.getElementById('play-btn');
-            if(audio.paused) {
-                audio.play(); vinyl.classList.add('playing'); btn.classList.replace('fa-play', 'fa-pause');
-            } else {
-                audio.pause(); vinyl.classList.remove('playing'); btn.classList.replace('fa-pause', 'fa-play');
-            }
-            haptic(50);
-        }
-
-        function initVisualizer() {
-            const cont = document.getElementById('viz-container');
-            for(let i=0; i<20; i++) {
-                const b = document.createElement('div');
-                b.className = 'visual-bar';
-                cont.appendChild(b);
-            }
+        // 8, 9, 13, 14, 25. SIMULATORS
+        function startSims() {
+            let t = 300;
             setInterval(() => {
-                if(!audio.paused) {
-                    document.querySelectorAll('.visual-bar').forEach(bar => {
-                        bar.style.height = (Math.random()*40 + 5) + "px";
-                    });
-                }
-            }, 100);
+                // 25. Timer
+                let m = Math.floor(t/60), s = t%60;
+                document.getElementById('timer').innerText = `${m}:${s<10?'0'+s:s}`;
+                if(t>0) t--;
+                // 8 & 9. Stats
+                document.getElementById('ping').innerText = Math.floor(Math.random()*20+5)+"ms";
+                document.getElementById('visitors').innerText = (2400+Math.floor(Math.random()*50)).toLocaleString();
+                // 14. Rank Bar
+                let rb = document.getElementById('rank-bar');
+                let w = parseInt(rb.style.width) || 0;
+                rb.style.width = w<100 ? (w+10)+"%" : "0%";
+            }, 1000);
+
+            // 13. Toast
+            setInterval(() => {
+                const toast = document.getElementById('toast');
+                document.getElementById('msg').innerText = "Order Legend Success!";
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            }, 10000);
         }
 
-        // --- 4. CODER AI LOGIC ---
-        function askAI() {
-            const inp = document.getElementById('chat-input');
-            const box = document.getElementById('chat-box');
-            if(!inp.value) return;
-            box.innerHTML += `<div class="text-right text-white"><b>YOU:</b> ${inp.value}</div>`;
-            const v = inp.value.toLowerCase(); inp.value = "";
-            haptic(20);
-            setTimeout(() => {
-                let r = "Neural Brain: Fokus pada Joki Lurax atau koding HTML/JS saja Wak!";
-                if(v.includes("joki")) r = "Joki Lurax Titan: Fast rank, No cheat, Login aman 100%.";
-                if(v.includes("html") || v.includes("kode") || v.includes("bikin")) {
-                    r = `Ini snippet kode koding buat lu Wak:<div class="code-box">&lt;div class="gacor"&gt;<br>  &lt;h1&gt;Lurax King&lt;/h1&gt;<br>&lt;/div&gt;</div>`;
-                }
-                box.innerHTML += `<div class="text-gold"><b>BRAIN-AI:</b> ${r}</div>`;
-                box.scrollTop = box.scrollHeight;
-            }, 800);
+        // 12. Copy
+        function copyID() {
+            navigator.clipboard.writeText("LURAX_PILOT_VVIP");
+            const n = document.getElementById('copy-note');
+            n.style.opacity = 1; setTimeout(() => n.style.opacity=0, 2000);
+            if(window.navigator.vibrate) window.navigator.vibrate(50); // 26. Haptic
         }
 
-        // --- 5. GACOR SIMULATIONS ---
+        // 16. Particle
+        document.addEventListener('touchstart', (e) => {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = e.touches[0].clientX+'px';
+            p.style.top = e.touches[0].clientY+'px';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 600);
+        });
+
+        // 3. Matrix
         function startMatrix() {
             const c = document.getElementById('matrix-canvas');
             const ctx = c.getContext('2d');
             c.width = window.innerWidth; c.height = window.innerHeight;
-            const drops = Array(Math.floor(c.width/10)).fill(1);
+            const d = Array(Math.floor(c.width/10)).fill(1);
             setInterval(() => {
-                ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,c.width,c.height);
-                ctx.fillStyle = "#bf953f"; ctx.font = "10px monospace";
-                drops.forEach((y, i) => {
+                ctx.fillStyle = "rgba(0,0,0,0.1)"; ctx.fillRect(0,0,c.width,c.height);
+                ctx.fillStyle = "#ff003c"; ctx.font = "10px monospace";
+                d.forEach((y, i) => {
                     ctx.fillText(Math.random()>0.5?"1":"0", i*10, y*10);
-                    if(y*10 > c.height && Math.random()>0.975) drops[i]=0; drops[i]++;
+                    if(y*10>c.height && Math.random()>0.975) d[i]=0; d[i]++;
                 });
             }, 50);
         }
 
-        function startStatsSim() {
-            const ranks = ["Striker", "Elite", "Legend", "Executioner"];
-            let rIdx = 0;
-            setInterval(() => {
-                const n = new Date(); document.getElementById('clock').innerText = n.getHours().toString().padStart(2,'0')+":"+n.getMinutes().toString().padStart(2,'0')+":"+n.getSeconds().toString().padStart(2,'0');
-                document.getElementById('ping').innerText = (Math.floor(Math.random()*10)+5) + "ms";
-                
-                let bar = document.getElementById('rank-bar');
-                let w = parseInt(bar.style.width) || 0;
-                if(w < 100) bar.style.width = (w + 10) + "%";
-                else { bar.style.width = "0%"; rIdx = (rIdx + 1) % ranks.length; document.getElementById('rank-text').innerText = ranks[rIdx]; }
-
-                const kf = document.getElementById('kill-feed');
-                const msgs = ["Lurax WIPED SQUAD", "Lurax HEADSHOT Sniper", "Queen KILLED Elite"];
-                const d = document.createElement('div');
-                d.innerHTML = `> ${msgs[Math.floor(Math.random()*msgs.length)]}`;
-                kf.prepend(d);
-                if(kf.children.length > 4) kf.lastChild.remove();
-            }, 3000);
-        }
-
+        // 18. Anti-Inspect
         document.addEventListener('contextmenu', e => e.preventDefault());
-    </script>
-</body>
-</html>
--green-500 font-bold z-[1000]">
-            REVENUE: Rp <span id="revenue">28.450.000</span>
-        </div>
-        <div class="fixed top-20 right-4 glass-card px-3 py-1 text-[8px] border-red-500/30 text-red-500 font-bold z-[1000]">
-            <span id="live-users">2104</span> PILOTS ONLINE
-        </div>
-
-        <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 flex gap-4 bg-black/60 p-4 rounded-3xl border border-gold/20 backdrop-blur-2xl z-[5000] shadow-2xl">
-            <button onclick="nav(0)" class="text-gold w-12 h-12 flex items-center justify-center text-xl transition active:scale-90"><i class="fas fa-id-badge"></i></button>
-            <button onclick="nav(1)" class="text-gold w-12 h-12 flex items-center justify-center text-xl transition active:scale-90"><i class="fas fa-microchip"></i></button>
-            <button onclick="nav(2)" class="text-gold w-12 h-12 flex items-center justify-center text-xl transition active:scale-90"><i class="fas fa-brain"></i></button>
-            <button onclick="nav(3)" class="text-gold w-12 h-12 flex items-center justify-center text-xl transition active:scale-90"><i class="fas fa-shopping-cart"></i></button>
-        </nav>
-
-        <div id="fake-notif" class="fixed top-32 left-1/2 -translate-x-1/2 z-[2000] opacity-0 transition-all duration-500 bg-black/90 px-6 py-2 rounded-full border border-green-500/40 text-[9px] font-bold uppercase text-white shadow-xl">
-            <span class="text-green-500" id="notif-text"></span> ORDER SUCCESSFUL!
-        </div>
-    </main>
-
-    <script>
-        // 1. TITAN LOADER
-        function initLoader() {
-            const term = document.getElementById('log-terminal');
-            const logs = ["> Initializing TITAN-V4...", "> Bypassing NetEase Shield...", "> Injecting Win-Rate Code...", "> Masking Pilot IP Address...", "> Connection Secure.", "> Welcome, Supreme Pilot Lurax."];
-            let i = 0;
-            const interval = setInterval(() => {
-                if(i < logs.length) {
-                    term.innerHTML += logs[i] + "<br>";
-                    document.getElementById('loader-bar').style.width = ((i+1) * 16.6) + "%";
-                    i++;
-                } else {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        document.getElementById('loader').classList.add('animate__animated', 'animate__fadeOut');
-                        setTimeout(() => {
-                            document.getElementById('loader').style.display = 'none';
-                            document.getElementById('welcome').style.display = 'flex';
-                            initTyped();
-                        }, 500);
-                    }, 800);
-                }
-            }, 600);
-        }
-
-        function initTyped() { 
-            new Typed('#typed', { strings: ['UNBEATABLE PILOT', 'SQUAD WIPE MODE', 'SAFE INJECTION', 'DOMINATION ACTIVE'], typeSpeed: 50, backSpeed: 30, loop: true }); 
-        }
-
-        // 2. CORE ACTIONS
-        function igniteSystem() {
-            document.getElementById('welcome').style.display = 'none';
-            document.getElementById('app').classList.remove('hidden');
-            document.getElementById('bgm').play().catch(() => {});
-            startGacorSimulations();
-            haptic(100);
-        }
-
-        function toggleTheme() { 
-            document.body.classList.toggle('light-mode'); 
-            haptic(50);
-        }
-
-        function nav(idx) {
-            const layers = document.querySelectorAll('.layer');
-            layers.forEach((l, i) => l.classList.toggle('active', i === idx));
-            haptic(30);
-        }
-
-        function haptic(ms) { if(window.navigator.vibrate) window.navigator.vibrate(ms); }
-
-        // 3. NEURAL AI SYSTEM
-        function askAI() {
-            const inp = document.getElementById('chat-input');
-            const box = document.getElementById('chat-box');
-            if(!inp.value) return;
-            box.innerHTML += `<div class="text-right text-white"><b>YOU:</b> ${inp.value}</div>`;
-            const v = inp.value.toLowerCase(); inp.value = "";
-            haptic(20);
-            setTimeout(() => {
-                let r = "Data error. Fokus pada Joki Lurax saja, bos!";
-                if(v.includes("joki")) r = "Joki Lurax Titan: Fast rank, Amanah, No cheat. Rank naik kilat!";
-                if(v.includes("lurax")) r = "Lurax & Queen adalah Pilot Top Global Blood Strike. Skill VVIP.";
-                if(v.includes("harga")) r = "Harga VVIP tapi kualitas Dewa. Langsung klik icon Keranjang bos!";
-                box.innerHTML += `<div class="text-gold"><b>TITAN-AI:</b> ${r}</div>`;
-                box.scrollTop = box.scrollHeight;
-            }, 800);
-        }
-
-        // 4. GACOR SIMULATIONS (RANK, KILL, STATS)
-        function startGacorSimulations() {
-            // Matrix Rain
-            const c = document.getElementById('matrix-canvas');
-            const ctx = c.getContext('2d');
-            c.width = window.innerWidth; c.height = window.innerHeight;
-            const chars = "0101LURAXTITAN";
-            const drops = Array(Math.floor(c.width/10)).fill(1);
-            function drawMatrix() {
-                ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,c.width,c.height);
-                ctx.fillStyle = "#bf953f"; ctx.font = "10px monospace";
-                drops.forEach((y, i) => {
-                    ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*10, y*10);
-                    if(y*10 > c.height && Math.random() > 0.975) drops[i] = 0; drops[i]++;
-                });
-            }
-            setInterval(drawMatrix, 50);
-
-            // Rank & Kill Feed
-            const ranks = ["Striker", "Elite", "Legend", "Executioner"];
-            let rIdx = 0;
-            setInterval(() => {
-                let bar = document.getElementById('rank-bar');
-                let name = document.getElementById('rank-name');
-                let w = parseInt(bar.style.width) || 0;
-                if(w < 100) bar.style.width = (w + 10) + "%";
-                else { bar.style.width = "0%"; rIdx = (rIdx + 1) % ranks.length; name.innerText = ranks[rIdx]; }
-                
-                const kFeed = document.getElementById('kill-feed');
-                const kMsg = ["Lurax HEADSHOT Noob_01", "Lurax SQUAD WIPE Valley", "Lurax KILLED Top_Player", "Queen ASSISTED Lurax"];
-                const div = document.createElement('div');
-                div.innerHTML = `> ${kMsg[Math.floor(Math.random()*kMsg.length)]}`;
-                kFeed.prepend(div);
-                if(kFeed.children.length > 4) kFeed.lastChild.remove();
-            }, 3000);
-
-            // Stats & Notifications
-            setInterval(() => {
-                const n = new Date(); document.getElementById('clock').innerText = n.getHours().toString().padStart(2,'0')+":"+n.getMinutes().toString().padStart(2,'0')+":"+n.getSeconds().toString().padStart(2,'0');
-                document.getElementById('ping').innerText = Math.floor(Math.random()*10)+5;
-                document.getElementById('live-users').innerText = 2100 + Math.floor(Math.random()*50);
-                let rev = document.getElementById('revenue');
-                rev.innerText = (parseInt(rev.innerText.replace(/\./g,'')) + 7500).toLocaleString('id-ID');
-                document.querySelectorAll('.visualizer-bar').forEach(b => b.style.height = Math.random()*25 + "px");
-            }, 100);
-
-            const players = ["Sultan_Joki", "Hacker_Pro", "Rizky_VVIP", "Elite_Pilot"];
-            setInterval(() => {
-                const n = document.getElementById('fake-notif');
-                document.getElementById('notif-text').innerText = players[Math.floor(Math.random()*players.length)];
-                n.style.opacity = "1"; n.style.transform = "translateX(-50%) translateY(20px)";
-                setTimeout(() => { n.style.opacity = "0"; n.style.transform = "translateX(-50%) translateY(0)"; }, 4000);
-            }, 15000);
-        }
-
-        // ANTI-STEAL
-        document.addEventListener('contextmenu', e => e.preventDefault());
-    </script>
-</body>
-</html>
- 
-            document.getElementById('clock').innerText = n.getHours().toString().padStart(2,'0')+":"+n.getMinutes().toString().padStart(2,'0')+":"+n.getSeconds().toString().padStart(2,'0');
-            document.getElementById('ping-val').innerText = Math.floor(Math.random()*15)+10;
-        }, 1000);
-
-        // 2. BOOTLOADER
-        function initHackerMode() {
-            const term = document.getElementById('type-terminal');
-            const bar = document.getElementById('progress-bar');
-            const lines = ["> BOOTING LURAX_VIP_CORE...", "> BYPASSING BLOODSTRIKE_FIREWALL...", "> INJECTING WIN_STREAK_SCRIPT...", "> ACCESS GRANTED. WELCOME MASTER."];
-            let i = 0;
-            const intv = setInterval(() => {
-                if(i < lines.length) { term.innerHTML += lines[i] + "<br>"; bar.style.width = ((i + 1) * 25) + "%"; i++; }
-                else { clearInterval(intv); setTimeout(() => { document.getElementById('hacker-loader').style.display = 'none'; document.getElementById('welcome-screen').style.display = 'flex'; initTyped(); }, 800); }
-            }, 600);
-        }
-
-        // 3. TEXT ANIMATION
-        function initTyped() {
-            new Typed('#typed', {
-                strings: ['AUTO WIN STREAK', 'EXECUTIONER RANK', 'SQUAD WIPE MASTER', 'BLOOD STRIKE ELITE'],
-                typeSpeed: 60, backSpeed: 40, loop: true
-            });
-        }
-
-        // 4. LAUNCH APP
-        function startApp() {
-            const welcome = document.getElementById('welcome-screen');
-            welcome.style.transform = 'translateY(-100%)';
-            welcome.style.opacity = '0';
-            setTimeout(() => {
-                welcome.style.display = 'none';
-                document.getElementById('main-ui').classList.remove('hidden');
-                document.getElementById('main-ui').classList.add('animate__animated', 'animate__fadeIn');
-                startGacorSystems();
-            }, 800);
-            document.getElementById('bgm').play().catch(() => console.log("Gesture Needed"));
-        }
-
-        // 5. LIVE GACOR LOGIC
-        function startGacorSystems() {
-            // Live Users (Min 2000)
-            setInterval(() => {
-                let el = document.getElementById('live-users');
-                let val = parseInt(el.innerText);
-                val += (Math.floor(Math.random() * 9) - 4);
-                if (val < 2000) val = 2150;
-                el.innerText = val;
-                
-                // Revenue counter
-                let revEl = document.getElementById('revenue');
-                let revVal = parseInt(revEl.innerText.replace(/\./g, ''));
-                revEl.innerText = (revVal + 5000).toLocaleString('id-ID');
-            }, 3000);
-
-            // Fake Success Notification
-            const players = ["Andi_Striker", "Sultan_Gacor", "King_BS", "Rizky_VIP", "Squad_Wiper"];
-            setInterval(() => {
-                const n = document.getElementById('fake-notif');
-                document.getElementById('notif-text').innerText = players[Math.floor(Math.random()*players.length)] + " ORDERED";
-                n.style.opacity = "1"; n.style.transform = "translateX(-50%) translateY(20px) scale(1)";
-                setTimeout(() => { n.style.opacity = "0"; n.style.transform = "translateX(-50%) translateY(0) scale(0.9)"; }, 4000);
-            }, 10000);
-
-            // Strike Log
-            setInterval(() => {
-                const log = document.getElementById('strike-log');
-                const div = document.createElement('div');
-                div.innerHTML = `> [!] Squad Wipe by Lurax in Valley...`;
-                log.appendChild(div);
-                if(log.children.length > 3) log.removeChild(log.firstChild);
-                setTimeout(() => div.remove(), 5000);
-            }, 7000);
-        }
-
-        // 6. NAVIGATION
-        function showLayer(idx) {
-            const layers = document.querySelectorAll('.layer');
-            const navBtns = document.querySelectorAll('nav button');
-            layers.forEach((l, i) => {
-                l.classList.toggle('active', i === idx);
-                navBtns[i].classList.toggle('bg-gold', i === idx);
-                navBtns[i].classList.toggle('text-black', i === idx);
-            });
-            if(window.navigator.vibrate) window.navigator.vibrate(25);
-        }
-
-        // 7. SECURITY (ANTI-INSPECT)
-        document.addEventListener('contextmenu', e => { e.preventDefault(); showSec(); });
-        document.onkeydown = e => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) { showSec(); return false; } };
-        function showSec() { const s = document.getElementById('security-alert'); s.style.display = 'flex'; setTimeout(() => s.style.display = 'none', 2000); }
-
-        // 8. BACKGROUND PARTICLES
-        const canvas = document.getElementById('particle-canvas'); const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        let pts = [];
-        class P { constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.v=Math.random()*0.4;} update(){this.y-=this.v;if(this.y<0)this.y=canvas.height;} draw(){ctx.fillStyle='rgba(191,149,63,0.15)';ctx.beginPath();ctx.arc(this.x,this.y,1,0,Math.PI*2);ctx.fill();} }
-        for(let i=0;i<50;i++) pts.push(new P());
-        function anim(){ ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(anim); }
-        anim();
-    </script>
-</body>
-</html>
-setInterval(() => {
-                let current = parseInt(document.getElementById('live-users').innerText);
-                document.getElementById('live-users').innerText = (current + (Math.floor(Math.random()*11)-5));
-                // Revenue counter
-                let rev = parseInt(document.getElementById('revenue').innerText.replace(/\./g,''));
-                document.getElementById('revenue').innerText = (rev + 5000).toLocaleString('id-ID');
-            }, 3000);
-
-            // Fake Success Notif
-            const names = ["Andi_BS", "Sultan_Gacor", "Rizky_Elite", "Player_77", "Lurax_Fans"];
-            setInterval(() => {
-                const n = document.getElementById('fake-notif');
-                document.getElementById('notif-text').innerText = names[Math.floor(Math.random()*names.length)] + " PAID";
-                n.style.opacity = "1"; n.style.transform = "translateX(-50%) translateY(20px) scale(1)";
-                setTimeout(() => { n.style.opacity = "0"; n.style.transform = "translateX(-50%) translateY(0) scale(0.9)"; }, 4000);
-            }, 12000);
-
-            // Strike Log
-            setInterval(() => {
-                const log = document.getElementById('strike-log');
-                const div = document.createElement('div');
-                div.innerHTML = `> [SYSTEM] Squad wiped by Lurax in desert...`;
-                log.appendChild(div);
-                if(log.children.length > 3) log.removeChild(log.firstChild);
-                setTimeout(() => div.remove(), 5000);
-            }, 6000);
-
-            // Start Audio
-            document.getElementById('bgm').play().catch(e => console.log("Audio play deferred"));
-        }
-
-        // 5. ANTI-INSPECT
-        document.addEventListener('contextmenu', e => { e.preventDefault(); showAlert(); });
-        document.onkeydown = e => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) { showAlert(); return false; } };
-        function showAlert() { document.getElementById('security-alert').style.display='flex'; setTimeout(() => document.getElementById('security-alert').style.display='none', 2000); }
-
-        // 6. PARTICLES
-        const canvas = document.getElementById('particle-canvas'); const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        let pArray = [];
-        class P { constructor(){ this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.s=Math.random()*1.5; this.v=Math.random()*0.5; } update(){ this.y-=this.v; if(this.y<0) this.y=canvas.height; } draw(){ ctx.fillStyle='rgba(191,149,63,0.3)'; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); } }
-        for(let i=0; i<80; i++) pArray.push(new P());
-        function anim(){ ctx.clearRect(0,0,canvas.width,canvas.height); pArray.forEach(p=>{p.update(); p.draw();}); requestAnimationFrame(anim); }
-        anim();
     </script>
 </body>
 </html>
